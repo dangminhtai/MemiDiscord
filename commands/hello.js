@@ -3,12 +3,12 @@ import { SlashCommandBuilder } from 'discord.js';
 import { botName } from '../config/bot.js';
 
 export const data = new SlashCommandBuilder()
-    .setName('chao')
+    .setName('hello')
     .setDescription(`Lệnh chào cho bot ${botName}`);
 
 export async function execute(interaction) {
     await interaction.reply({
-        content: `Mình chào bạn, mình là ${botName} 🐰`,
+        content: `Chào bạn, mình là ${botName} 🐰`,
         ephemeral: true,
     });
 }
