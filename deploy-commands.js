@@ -33,11 +33,7 @@ async function deployCommands(commands) {
     const rest = new REST({ version: '10' }).setToken(process.env.DISCORD_TOKEN);
 
     try {
-        console.log('⛔ Clearing existing global commands...');
         await rest.put(Routes.applicationCommands(process.env.CLIENT_ID), { body: [] });
-        console.log('✅ Successfully cleared all global commands.');
-
-        console.log(`🚀 Deploying ${commands.length} global commands...`);
         const data = await rest.put(Routes.applicationCommands(process.env.CLIENT_ID), { body: commands });
         console.log(`✅ Successfully deployed ${data.length} global commands.`);
     } catch (error) {

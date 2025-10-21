@@ -5,6 +5,7 @@ import { botName } from './config/bot.js';
 import path from "path";
 import { fileURLToPath } from "url";
 import { loadCommands, deployCommands } from './deploy-commands.js'
+
 const client = new Client({
     intents: [
         GatewayIntentBits.Guilds,
@@ -23,7 +24,7 @@ client.once(Events.ClientReady, () => {
 });
 
 client.on(Events.MessageCreate, (message) => {
-    if (message.author.bot) return //Nếu tác giả nhắn tin nhắn này là bot thì không làm gì cả
+    if (message.author.bot) return
     if (message.content == 'Chào') {
         message.channel.send(
             `Chào bạn ạ, mình là ${botName} 🐰`);
@@ -44,7 +45,7 @@ client.on(Events.InteractionCreate, async interaction => {
     }
 });
 
-const commandsPath = path.join(__dirname, 'commands') // thư mục chứa slash commands
+const commandsPath = path.join(__dirname, 'commands')
 const commands = await loadCommands(commandsPath, client);
 await deployCommands(commands);
 
