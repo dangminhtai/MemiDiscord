@@ -1,4 +1,4 @@
-import { systemPrompt } from "../systemPrompt/vn";
+import { systemPrompt } from "./systemPrompt/vn";
 import { GoogleGenAI } from "@google/genai";
 import dotenv from "dotenv";
 dotenv.config()
