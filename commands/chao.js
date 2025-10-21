@@ -1,7 +1,7 @@
+//commands/chao.js
 import { SlashCommandBuilder } from 'discord.js';
-
-
 import { botName } from '../config/bot.js';
+
 export const data = new SlashCommandBuilder()
     .setName('chao')
     .setDescription(`Lệnh chào cho bot ${botName}`);
