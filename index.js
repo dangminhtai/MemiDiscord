@@ -1,6 +1,6 @@
 import dotenv from 'dotenv'
 dotenv.config()
-import { Client, GatewayIntentBits, Partials, Events } from 'discord.js'
+import { Client, GatewayIntentBits, Partials, Events, SlashCommandBuilder } from 'discord.js'
 const client = new Client({
     intents: [
         GatewayIntentBits.Guilds,
@@ -24,4 +24,19 @@ client.on(Events.MessageCreate, (message) => {
     }
 });
 
+// Thử tạo 1 commands mới
+export const data = new SlashCommandBuilder()
+    .setName('chao')
+    .setNSFW(false)
+    .setDescription(`Lệnh chào cho bot ${botName}`)
+
+export async function execute(interaction) {
+    await interaction.reply(
+        {
+            content: 'Mình chào bạn',
+            ephemeral: true
+        }
+    );
+
+}
 client.login(process.env.DISCORD_TOKEN)
