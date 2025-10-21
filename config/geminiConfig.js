@@ -1,4 +1,4 @@
-import { systemPrompt } from "./systemPrompt/vn";
+import { systemPrompt } from "./systemPrompt/vn.js";
 import { GoogleGenAI } from "@google/genai";
 import dotenv from "dotenv";
 dotenv.config()
@@ -18,7 +18,7 @@ async function genReply(content) {
             }
         }
     );
-    console.log('Phản hồi nhận được', response.text);
+    return response.text;
 }
 
 export { genReply };

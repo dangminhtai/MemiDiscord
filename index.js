@@ -1,11 +1,10 @@
 import dotenv from 'dotenv'
 dotenv.config()
 import { Client, GatewayIntentBits, Partials, Events, Collection } from 'discord.js'
-import { botName } from './config/bot.js';
 import path from "path";
 import { fileURLToPath } from "url";
 import { loadCommands, deployCommands } from './deploy-commands.js'
-
+import { genReply } from './config/geminiConfig.js';
 const client = new Client({
     intents: [
         GatewayIntentBits.Guilds,
@@ -23,13 +22,16 @@ client.once(Events.ClientReady, () => {
     console.log(`Bot đã đăng nhập dưới tên ${client.user.tag}`);
 });
 
-client.on(Events.MessageCreate, (message) => {
+client.on(Events.MessageCreate, async (message) => {
     if (message.author.bot) return
-    if (message.content == 'Chào') {
-        message.channel.send(
-            `Chào bạn ạ, mình là ${botName} 🐰`);
+    const res = await genReply(message.content)
+    if (res) {
+        message.channel.send(res)
+    } else {
+        console.log('genReply trả về undefined')
     }
 });
+
 
 client.on(Events.InteractionCreate, async interaction => {
     if (!interaction.isChatInputCommand()) return;
