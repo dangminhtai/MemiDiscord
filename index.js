@@ -1,6 +1,6 @@
 import dotenv from 'dotenv'
 dotenv.config()
-import { Client, GatewayIntentBits, Partials } from 'discord.js'
+import { Client, GatewayIntentBits, Partials, Events } from 'discord.js'
 const client = new Client({
     intents: [
         GatewayIntentBits.Guilds,
@@ -12,14 +12,15 @@ const client = new Client({
 });
 
 const botName = 'Memi';
-client.once('ready', () => {
+client.once(Events.ClientReady, () => {
     console.log(`Bot đã đăng nhập dưới tên ${client.user.tag}`);
 });
 
-client.on('messageCreate', (message) => {
+client.on(Events.MessageCreate, (message) => {
     if (message.author.bot) return //Nếu tác giả nhắn tin nhắn này là bot thì không làm gì cả
     if (message.content == 'Chào') {
-        message.channel.send(`Chào bạn ạ, mình là ${botName} 🐰`);
+        message.channel.send(
+            `Chào bạn ạ, mình là ${botName} 🐰`);
     }
 });
 
