@@ -4,8 +4,8 @@ import { Client, GatewayIntentBits, Partials, Events, Collection } from 'discord
 import path from "path";
 import { fileURLToPath } from "url";
 import { loadCommands, deployCommands } from './deployCommands.js'
-import { genReply } from './config/geminiConfig.js';
 import { connectDB } from './db.js';
+import * as source from './message/handleMess.js'
 const client = new Client({
     intents: [
         GatewayIntentBits.Guilds,
@@ -24,15 +24,10 @@ client.once(Events.ClientReady, () => {
 });
 
 client.on(Events.MessageCreate, async message => {
-    if (message.author.bot) return;
-
-    await message.channel.sendTyping();
-
-    const res = await genReply(message.content);
-    if (res) {
-        message.channel.send(res);
-    } else {
-        console.log('genReply trả về undefined');
+    try {
+        await source.handleMess(message);
+    } catch (error) {
+        console.error('❌ Lỗi khi xử lý tin nhắn:', error);
     }
 });
 

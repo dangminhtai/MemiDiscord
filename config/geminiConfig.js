@@ -8,7 +8,7 @@ const ai = new GoogleGenAI(
     }
 );
 
-async function genReply(content) {
+async function genReply(userID = null, content) {
     const response = await ai.models.generateContent(
         {
             model: 'gemini-2.5-flash-lite',
