@@ -5,6 +5,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 import { loadCommands, deployCommands } from './deploy-commands.js'
 import { genReply } from './config/geminiConfig.js';
+import { connectDB } from './db.js';
 const client = new Client({
     intents: [
         GatewayIntentBits.Guilds,
@@ -53,4 +54,13 @@ const commandsPath = path.join(__dirname, 'commands')
 const commands = await loadCommands(commandsPath, client);
 await deployCommands(commands);
 
-client.login(process.env.DISCORD_TOKEN)
+async function main() {
+    try {
+        await connectDB();
+        await client.login(process.env.DISCORD_TOKEN);
+    } catch (err) {
+        console.error('Lỗi khi kết nối và khởi động BOT', err);
+    }
+    client.on(Events.GuildCreate, guildCreateHandler.execute);
+}
+main();
