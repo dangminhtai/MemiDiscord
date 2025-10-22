@@ -7,6 +7,7 @@ const ai = new GoogleGenAI(
         apiKey: process.env.GEMINI_API_KEY
     }
 );
+
 async function genReply(content) {
     const response = await ai.models.generateContent(
         {
@@ -14,7 +15,7 @@ async function genReply(content) {
             contents: content,
             config: {
                 systemInstruction: systemPrompt,
-                temperature: 0.1,
+                temperature: 2
             }
         }
     );

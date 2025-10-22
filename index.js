@@ -22,16 +22,18 @@ client.once(Events.ClientReady, () => {
     console.log(`Bot đã đăng nhập dưới tên ${client.user.tag}`);
 });
 
-client.on(Events.MessageCreate, async (message) => {
-    if (message.author.bot) return
-    const res = await genReply(message.content)
+client.on(Events.MessageCreate, async message => {
+    if (message.author.bot) return;
+
+    await message.channel.sendTyping();
+
+    const res = await genReply(message.content);
     if (res) {
-        message.channel.send(res)
+        message.channel.send(res);
     } else {
-        console.log('genReply trả về undefined')
+        console.log('genReply trả về undefined');
     }
 });
-
 
 client.on(Events.InteractionCreate, async interaction => {
     if (!interaction.isChatInputCommand()) return;
