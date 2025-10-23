@@ -6,6 +6,8 @@ import { fileURLToPath } from "url";
 import { loadCommands, deployCommands } from './deployCommands.js'
 import { connectDB } from './db.js';
 import * as source from './message/handleMess.js'
+import onReady from './events/Client/onReady.js';
+// import { info, success, error, warn } from './utils/logger.js';
 const client = new Client({
     intents: [
         GatewayIntentBits.Guilds,
@@ -18,10 +20,7 @@ const client = new Client({
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 client.commands = new Collection()
-
-client.once(Events.ClientReady, () => {
-    console.log(`Bot đã đăng nhập dưới tên ${client.user.tag}`);
-});
+onReady(client);
 
 client.on(Events.MessageCreate, async message => {
     try {
