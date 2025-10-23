@@ -10,6 +10,7 @@ export async function execute(message) {
     const history = "";
 
     try {
+        await message.channel.sendTyping();
         const response = await aiChat.genReply(`${message.content}\n${history}`, userId);
         if (response) await message.channel.send(response);
     } catch (err) {

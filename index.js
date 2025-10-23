@@ -1,12 +1,14 @@
 import dotenv from 'dotenv'
 dotenv.config()
-import { Client, GatewayIntentBits, Partials, Events, Collection } from 'discord.js'
+import { Client, GatewayIntentBits, Partials, Collection } from 'discord.js'
 import path from "path";
 import { fileURLToPath } from "url";
 import { loadCommands, deployCommands } from './deployCommands.js'
 import { connectDB } from './db.js';
-import * as source from './message/handleMess.js'
+
 import onReady from './events/Client/onReady.js';
+import messageCreate from './events/Client/messageCreate.js';
+import interactionCreate from './events/Client/interactionCreate.js';
 // import { info, success, error, warn } from './utils/logger.js';
 const client = new Client({
     intents: [
@@ -21,28 +23,8 @@ const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 client.commands = new Collection()
 onReady(client);
-
-client.on(Events.MessageCreate, async message => {
-    try {
-        await source.handleMess(message);
-    } catch (error) {
-        console.error('❌ Lỗi khi xử lý tin nhắn:', error);
-    }
-});
-
-client.on(Events.InteractionCreate, async interaction => {
-    if (!interaction.isChatInputCommand()) return;
-
-    const command = client.commands.get(interaction.commandName);
-    if (!command) return;
-
-    try {
-        await command.execute(interaction);
-    } catch (error) {
-        console.error(error);
-        await interaction.reply({ content: 'Có lỗi xảy ra khi thực hiện lệnh này 🐰', ephemeral: true });
-    }
-});
+messageCreate(client);
+interactionCreate(client);
 
 
 
