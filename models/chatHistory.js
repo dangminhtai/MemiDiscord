@@ -1,3 +1,4 @@
+//models/chatHistory.js
 const mongoose = require('mongoose');
 
 const messageSchema = new mongoose.Schema({
@@ -14,13 +15,24 @@ const messageSchema = new mongoose.Schema({
         type: Date,
         default: Date.now
     }
-
 }, { _id: false });
 
-const chat = new mongoose.Schema({
-    userId: { type: String, required: true, unique: true, index: true },
+const chatSchema = new mongoose.Schema({
+    scope: {
+        type: String,
+        enum: ['dm', 'guild'],
+        required: true
+    },
+    userId: { type: String, required: true },
     username: { type: String },
+
     messageId: { type: String },
+    guildId: { type: String },
+    channelId: { type: String },
+
     messages: [messageSchema]
 });
-module.exports = mongoose.model('DMMessage', chat);
+
+chatSchema.index({ scope: 1, userId: 1, guildId: 1, channelId: 1 });
+
+module.exports = mongoose.model('ChatHistory', chatSchema);
