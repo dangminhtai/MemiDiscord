@@ -1,27 +1,27 @@
 import mongoose from "mongoose";
 
+const messagePartSchema = new mongoose.Schema({
+    type: { type: String, enum: ["text", "audio", "image", "file"], required: true },
+    text: { type: String },
+    mimeType: { type: String },
+    data: { type: String }, // base64 hoặc URL upload
+}, { _id: false });
+
 const messageSchema = new mongoose.Schema({
     role: {
         type: String,
-        enum: ['user', 'assistant'],
-        required: true
+        enum: ["user", "assistant"],
+        required: true,
     },
-    content: {
-        type: String,
-        required: true
-    },
-    timestamp: {
-        type: Date,
-        default: Date.now
-    }
-
+    parts: [messagePartSchema],
+    timestamp: { type: Date, default: Date.now },
 }, { _id: false });
 
-const chat = new mongoose.Schema({
+const chatSchema = new mongoose.Schema({
     userId: { type: String, required: true, unique: true, index: true },
     username: { type: String },
     messageId: { type: String },
-    messages: [messageSchema]
+    messages: [messageSchema],
 });
 
-export default mongoose.model("DMChatHistory", chat);
+export default mongoose.model("DMChatHistory", chatSchema);
