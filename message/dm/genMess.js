@@ -1,24 +1,22 @@
-// events/dmHandler.js
-import { ChannelType } from "discord.js";
+import { Message as MyMessage } from "../../structure/Message.js";
 import { AIChat } from "../../structure/AIChat.js";
-
-const aiChat = new AIChat();
-
+import { ChannelType } from "discord.js";
+const ai = new AIChat();
 export async function execute(message) {
     if (message.author.bot || message.channel.type !== ChannelType.DM) return;
 
+    const msg = new MyMessage(message);
+    const msgType = msg.getMessageType();
     const userId = message.author.id;
     const username = message.author.username;
-    const content = message.content?.trim() || "";
-    const attachments = [...message.attachments.values()]; // array of Attachment
 
     try {
         await message.channel.sendTyping();
-
-        const reply = await aiChat.genReply(content, userId, username, attachments);
+        const reply = await ai.genReply(msg.getText(), userId, username, msgType);
         if (reply) await message.channel.send(reply);
-    } catch (err) {
-        console.error("[DMHandler] Failed to send AI response:", err);
-        try { await message.channel.send("Có lỗi khi xử lý. Thử gửi lại sau."); } catch (e) { /* ignore */ }
     }
-}
+    catch (err) {
+        console.error('Có lỗi khi gửi phản hồi', err);
+    }
+
+};
